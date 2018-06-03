@@ -2,6 +2,7 @@
 let model =
 {
     currentCat: null,
+    adminMode: false,
     // cat object array
     cats: [
         {
@@ -28,10 +29,11 @@ let octopus =
     init: function()
     {
         model.currentCat = model.cats[0];
-        // initialize both views
+        // initialize views
         catListView.init();
         catDetailView.init();
-
+        adminView.init();
+        adminView.hide();
     },
 
     getCurrentCat: function()
@@ -54,6 +56,41 @@ let octopus =
     {
         model.currentCat.clickCount++;
         catDetailView.render();
+    },
+
+    // run when we hit the admin button
+    adminShow: function()
+    {
+        if(model.adminShow === false)
+        {
+            model.adminShow = true;
+            adminView.show();
+        }
+        else
+        {
+            model.adminShow = false;
+            adminView.hide();
+        }
+    },
+
+    adminCancel: function() // hide admin button if we hit cancel button
+    {
+        adminView.hide();
+    },
+
+    adminSave: function() // save data and hide buttons
+    {
+        model.currentCat.name = adminName.value;
+        model.currentCat.imgSrc = adminUrl.value;
+        model.currentCat.clickCount = adminClicks.value;
+        catListView.render();
+        catDetailView.render();
+
+
+
+
+
+        adminView.hide();
     }
 };
 
@@ -126,6 +163,60 @@ let catDetailView =
     }
 };
 
+// VIEW admin mode
+let adminView =
+{
+    init: function()
+    {
+        // get the form elements
+        this.adminName = document.querySelector('.admin-name');
+        this.adminUrl = document.querySelector('.admin-url');
+        this.adminClicks = document.querySelector('.admin-clicks');
+        // get the whole area
+        this.adminArea = document.querySelector('.admin-area');
+
+        // get buttons
+        this.adminButton = document.querySelector('.admin-button');
+        this.saveButton = document.querySelector('.save-button');
+        this.cancelButton = document.querySelector('.cancel-button');
+
+        // add listeners
+        this.adminButton.addEventListener('click', function()
+        {
+            octopus.adminShow();
+        });
+
+        this.saveButton.addEventListener('click', function()
+        {
+            octopus.adminSave();
+        });
+
+        this.cancelButton.addEventListener('click', function()
+        {
+            octopus.adminCancel();
+        });
+
+        this.render();
+    },
+
+    render: function()
+    {
+        let currentCat = octopus.getCurrentCat();
+        this.adminName.value = currentCat.name;
+        this.adminUrl.value = currentCat.imgSrc;
+        this.adminClicks.value = currentCat.clickCount;
+    },
+
+    show: function()
+    {
+        this.adminArea.style.display = "block";
+    },
+
+    hide: function()
+    {
+        this.adminArea.style.display = "none";
+    }
+};
 
 // start
 octopus.init();

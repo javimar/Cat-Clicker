@@ -35,10 +35,10 @@ li:last-child {
 
 .admin-area {
     margin-top: 80px;
-    display: none;
+    /*display: none;*/
 }
 
-.button {
+.admin-button {
     background-color: #4CAF50;
     border: none;
     color: white;
