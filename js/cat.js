@@ -61,14 +61,15 @@ let octopus =
     // run when we hit the admin button
     adminShow: function()
     {
-        if(model.adminShow === false)
+        if(model.adminMode === false)
         {
-            model.adminShow = true;
+            model.adminMode = true;
+            adminView.render();
             adminView.show();
         }
         else
         {
-            model.adminShow = false;
+            model.adminMode = false;
             adminView.hide();
         }
     },
@@ -76,21 +77,18 @@ let octopus =
     adminCancel: function() // hide admin button if we hit cancel button
     {
         adminView.hide();
+        model.adminMode = false;
     },
 
     adminSave: function() // save data and hide buttons
     {
-        model.currentCat.name = adminName.value;
-        model.currentCat.imgSrc = adminUrl.value;
-        model.currentCat.clickCount = adminClicks.value;
+        model.currentCat.name = adminView.adminName.value;
+        model.currentCat.imgSrc = adminView.adminUrl.value;
+        model.currentCat.clickCount = adminView.adminClicks.value;
         catListView.render();
         catDetailView.render();
-
-
-
-
-
         adminView.hide();
+        model.adminMode = false;
     }
 };
 
